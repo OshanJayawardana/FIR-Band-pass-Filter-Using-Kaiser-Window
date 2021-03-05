@@ -25,7 +25,7 @@ y=hnT(x,Wc1,Wc2,Ws,T); %calling the ideal filter function
 f1=figure;
 stem(x,y);
 xlabel("n")
-ylabel("Amplitude")
+ylabel("Amplitude h_i_d_e_a_l[n]")
 title("Ideal filter: Impulse respomse")
 saveas(f1,'1.png')
 %***********************************************************************************%
@@ -57,7 +57,7 @@ wkn=wknT(x,alfa,Tou,Nint);  % calling kaiser window function
 f2=figure;
 stem(x,wkn)                 % plotting kaiser window impulse response
 xlabel("n")
-ylabel("Amplitude")
+ylabel("Amplitude w[n]")
 title("Kaiser winndow: Impulse response")
 saveas(f2,'2.png')
 %***********************************************************************************%
@@ -66,7 +66,7 @@ hn=y.*wkn; % windowed filter function
 f3=figure;
 stem(x,hn) %ploting filter
 xlabel("n")
-ylabel("Amplitude")
+ylabel("Amplitude h[n]")
 title("Windowed filter: Impulse response")
 saveas(f3,'3.png')
 %***********************************************************************************%
@@ -81,8 +81,8 @@ stem(x,hdash)
 
 xlim([0 Nint]) %plotting causal filter
 xlabel("n")
-ylabel("Amplitude")
-title("Causal windowed filter: Impulse response")
+ylabel("Amplitude h'[n]")
+title("Non-recursive FIR filter: Impulse response")
 saveas(f4,'4.png')
 %***********************************************************************************%
 
@@ -90,9 +90,16 @@ saveas(f4,'4.png')
 f5=figure;
 plot(w/pi,db(abs(h)))
 xlabel("Normalized Frequency (\times\pi rad/sample)")
-ylabel("Magnitude (dB)")
-title("Causal windowed filter: Magnitude response")
+ylabel("Magnitude (dB) H'(w)")
+title("Non-recursive FIR filter: Magnitude response")
 saveas(f5,'5.png')
+
+f51=figure;
+plot(w/pi,abs(h))
+xlabel("Normalized Frequency (\times\pi rad/sample)")
+ylabel("Magnitude H'(w)")
+title("Non-recursive FIR filter: Magnitude response")
+saveas(f51,'5.1.png')
 %***********************************************************************************%
 
 %plotting magnitude response of pass band
@@ -100,8 +107,8 @@ f6=figure;
 plot(w/pi,db(h))
 xlim([Op1*2/Ws Op2*2/Ws])
 xlabel("Normalized Frequency (\times\pi rad/sample)")
-ylabel("Magnitude (dB)")
-title("Causal windowed filter: Magnitude of the passband")
+ylabel("Magnitude (dB) H'(w)")
+title("Non-recursive FIR filter: Magnitude of the passband")
 saveas(f6,'6.png')
 %***********************************************************************************%
 
@@ -112,16 +119,18 @@ f7=figure;
 stem(x,yfilt);
 xlabel("n")
 ylim([-1.5 1.50])
-ylabel("Amplitude")
-title("Filtered signal using new filter")
+xlim([-200 -100])
+ylabel("Amplitude y[n]")
+title("Filtered signal using the new filter")
 saveas(f7,'7.png')
 %***********************************************************************************%
 
 yfiltid=conv(hnT(x,Wc1,Wc2,Ws,T),xn,"same"); %applying the ideal filter to the signal
 f8=figure;
 stem(x,yfiltid)
+xlim([-200 -100])
 xlabel("n")
-ylabel("Amplitude")
+ylabel("Amplitude y_i_d_e_a_l[n]")
 title("Filtered signal using ideal filter")
 saveas(f8,'8.png')
 %***********************************************************************************%
@@ -132,11 +141,11 @@ infft=fft(xn); %taking DTFT of input signal
 f9=figure;
 yyaxis left
 plot(f,abs(infft)) %plottting magnitude response of input signal
-ylabel("Amplitude : magnitude response of the input signal")
+ylabel("Amplitude : magnitude response of the input signal X(w)")
 hold on
 yyaxis right
 plot(f,abs(filtfft)) %plotting magnitude response of new filter
-ylabel("Amplitude : magnitude response of the new filter")
+ylabel("Amplitude : magnitude response of the new filter H'(w)")
 hold off
 xlim([0 1])
 xlabel("Normalized Frequency (\times\pi rad/sample)")
@@ -147,7 +156,7 @@ saveas(f9,'9.png')
 f10=figure;
 outfft=fft(yfilt); %taking DTFT of filtered signal
 plot(f,abs(outfft)) %plotting magnitude response of filtered signal
-ylabel("Amplitude : filtered signal")
+ylabel("Amplitude Y(w)")
 xlabel("Normalized Frequency (\times\pi rad/sample)")
 title("Filtered signal: Magnitude response")
 xlim([0 1])
